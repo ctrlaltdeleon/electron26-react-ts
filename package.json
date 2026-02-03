@@ -13,7 +13,10 @@
     "build:electron": "tsc -p tsconfig.electron.json",
     "build": "npm run build:renderer && npm run build:electron",
     "dist": "npm run build && electron-builder",
-    "dist:linux": "npm run build && electron-builder --linux"
+    "dist:linux": "npm run build && electron-builder --linux",
+    "dist:win": "npm run build && electron-builder --win",
+    "dist:mac": "npm run build && electron-builder --mac",
+    "dist:all": "npm run build && electron-builder -lwm"
   },
   "devDependencies": {
     "@types/node": "^24.0.0",
@@ -37,11 +40,9 @@
     "appId": "com.example.electron26reactts",
     "productName": "Electron26ReactTS",
     "files": [
-      "dist/**/*",
-      "dist/renderer/**/*"
+      "dist/**/*"
     ],
     "directories": {
-      "buildResources": "build",
       "output": "release"
     },
     "linux": {
@@ -50,6 +51,18 @@
         "deb"
       ],
       "category": "Development"
+    },
+    "win": {
+      "target": [
+        "nsis",
+        "zip"
+      ]
+    },
+    "mac": {
+      "target": [
+        "dmg",
+        "zip"
+      ]
     }
   }
 }
