@@ -1,0 +1,88 @@
+{
+  "name": "brt-frontend",
+  "version": "0.0.4",
+  "private": true,
+  "description": "description",
+  "author": {
+    "name": "author"
+  },
+  "main": "public/electron.js",
+  "electron-dev": "ELECTRON_START_URL=http://localhost:3000 electron .",
+  "homepage": "./",
+  "dependencies": {
+    "@material-ui/core": "^4.9.13",
+    "@material-ui/icons": "^4.9.1",
+    "@testing-library/jest-dom": "^4.2.4",
+    "@testing-library/react": "^9.3.2",
+    "@testing-library/user-event": "^7.1.2",
+    "enzyme": "^3.11.0",
+    "enzyme-adapter-react-16": "^1.15.2",
+    "file-saver": "^2.0.2",
+    "material-table": "^1.57.2",
+    "paper": "^0.12.4",
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0",
+    "react-editext": "^3.15.0",
+    "react-toastify": "^5.5.0",
+    "react-window": "^1.8.5",
+    "sinon": "^9.0.1",
+    "socket.io": "^2.3.0",
+    "use-debounce": "^3.4.2"
+  },
+  "scripts": {
+    "start": "cross-env react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "electron": "electron .",
+    "dev": "nf start",
+    "testcafe": "testcafe \"electron:.\" \"src/test/e2e/*.js\"",
+    "electron-builder": "electron-builder",
+    "electron-builder-test-not-stable": "electron-builder -c.extraMetadata.main=build/index.html",
+    "test:coverage": "react-scripts test --coverage --watchAll=false",
+    "sonar": "node sonar-project.js"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not ie <= 11",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "cross-env": "^7.0.3",
+    "electron": "^4.2.12",
+    "electron-builder": "22.3.2",
+    "foreman": "^3.0.1",
+    "prettier": "2.2.1",
+    "react-contexify": "^4.1.1",
+    "react-scripts": "^5.0.1",
+    "react-test-renderer": "^16.13.0",
+    "sonarqube-scanner": "^2.5.0",
+    "testcafe": "^1.8.1",
+    "testcafe-browser-provider-electron": "^0.0.14"
+  },
+  "jest": {
+    "collectCoverageFrom": [
+      "**/*.{js,}",
+      "!**/node_modules/**",
+      "!**/vendor/**"
+    ],
+    "coveragePathIgnorePatterns": [
+      "src/index.js",
+      "src/test/e2e/App.e2e.js",
+      "src/sonar-project.js",
+      "src/test"
+    ],
+    "coverageReporters": [
+      "lcov",
+      "text"
+    ]
+  }
+}
