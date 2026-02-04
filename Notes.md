@@ -3,3 +3,9 @@
 - AI explains that for building distributions, it should be on the native machine or CICD, but don't have that luxury
 - Finding a way to cache all the dependencies into the repo itself so that in the offline build we can reference that instead
 - Ran into the issue for Wine again
+
+# Tasks
+
+- Try BRT Frontend
+- Get the packages working for the boilerplate
+- Get backend and mongo working
