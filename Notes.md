@@ -1,8 +1,14 @@
 # My notes
 
-- AI explains that for building distributions, it should be on the native machine or CICD, but don't have that luxury
-- Finding a way to cache all the dependencies into the repo itself so that in the offline build we can reference that instead
-- Ran into the issue for Wine again
+- AI explains that for building distributions, it should be on the native machine or CICD, but don't have that luxury.
+- Finding a way to cache all the dependencies into the repo itself so that in the offline build we can reference that instead.
+- Ran into the issue for Wine again.
+- In Ubuntu VMs, prefer .deb over Snap for development tools like VS Code to avoid sandbox-related issues and keep the environment predictable.'
+- Crypto error?
+  - Most likely wrong Node/NPM version when it should be 18.20.8, 10.8.2
+- Node 16 on the host machine
+- Check the file struture if it's strict ac\*\*\*
+- Try getting sonarqube to work
 
 # Tasks
 
