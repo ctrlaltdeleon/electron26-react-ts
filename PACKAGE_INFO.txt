@@ -102,35 +102,35 @@ DEPENDENCIES
 PRODUCTION DEPENDENCIES (ship with the app)
 ------
 
-  "react": "^19.0.0"
+  "react": "19.0.0"
     → UI library. Used in src/renderer/.
-    → ^ means ≥19.0.0, <20.0.0 (compatible versions).
+    → Pinned to an exact version.
 
-  "react-dom": "^19.0.0"
+  "react-dom": "19.0.0"
     → React DOM renderer. Required for web/Electron UI.
 
 DEVELOPMENT DEPENDENCIES (used during build/dev, not shipped)
 ------
 
-  "@types/node": "^24.0.0"
+  "@types/node": "24.0.0"
     → TypeScript type definitions for Node.js APIs.
     → Needed for src/electron/ (including preload.ts; they use Node/Electron APIs).
 
-  "@types/react": "^19.0.0"
+  "@types/react": "19.0.0"
     → TypeScript types for React components and hooks.
 
-  "@types/react-dom": "^19.0.0"
+  "@types/react-dom": "19.0.0"
     → TypeScript types for React DOM APIs.
 
-  "@vitejs/plugin-react": "^4.0.0"
+  "@vitejs/plugin-react": "4.0.0"
     → Vite plugin for JSX transformation and React fast refresh.
     → Configured in vite.config.ts.
 
-  "concurrently": "^9.0.0"
+  "concurrently": "9.0.0"
     → CLI tool to run multiple commands in parallel.
     → Used in `npm run dev` to orchestrate dev:renderer, dev:electron:build, dev:electron.
 
-  "cross-env": "^7.0.3"
+  "cross-env": "7.0.3"
     → Sets environment variables cross-platform (Windows/Mac/Linux).
     → Used in dev:electron script to set VITE_DEV_SERVER_URL.
 
@@ -139,22 +139,22 @@ DEVELOPMENT DEPENDENCIES (used during build/dev, not shipped)
     → Used by electron . in dev and electron-builder in packaging.
     → ⚠️  Pinned on purpose; upgrade explicitly when needed.
 
-  "electron-builder": "^25.0.0"
+  "electron-builder": "25.0.0"
     → Tool for packaging Electron apps into installers.
     → Reads build config from package.json["build"].
 
-  "electronmon": "^2.0.0"
+  "electronmon": "2.0.0"
     → (Optional) File watcher for Electron main process reloads.
     → Currently not used in scripts (concurrently + tsc -w is the pattern here).
 
-  "typescript": "^5.0.0"
+  "typescript": "5.0.0"
     → TypeScript compiler. Used by tsc commands in build scripts.
 
-  "vite": "^5.0.0"
+  "vite": "5.0.0"
     → Build tool & dev server for the renderer (React).
     → Configured in vite.config.ts.
 
-  "wait-on": "^8.0.0"
+  "wait-on": "8.0.0"
     → CLI tool to wait for a port or file to be ready.
     → Used in dev:electron to ensure Vite server and compiled Electron code exist.
 
@@ -204,14 +204,14 @@ COMPILATION FLOW (Quick Reference)
 
 Development (npm run dev):
   1. Vite starts at http://localhost:5173 (src/renderer/main.tsx)
-  2. tsc watches and compiles src/electron/electron.ts → dist/electron.js
+  2. tsc watches and compiles src/electron/electron.ts → dist/electron/electron.js
   3. tsc watches and compiles src/electron/preload.ts → dist/electron/preload.js
-  4. Electron launches, loads dist/electron.js as main process
+  4. Electron launches, loads dist/electron/electron.js as main process
   5. Main process opens window, points to http://localhost:5173 for UI (via VITE_DEV_SERVER_URL)
 
 Production Build (npm run build):
   1. Vite builds src/renderer/main.tsx → dist/renderer/ (optimized)
-  2. tsc compiles src/electron/electron.ts → dist/electron.js
+  2. tsc compiles src/electron/electron.ts → dist/electron/electron.js
   3. tsc compiles src/electron/preload.ts → dist/electron/preload.js
 
 Packaging (npm run dist:linux):

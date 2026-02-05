@@ -118,9 +118,9 @@ project-root/
    │  └─ test/
    │     └─ setup.ts
    │
-   ├─ electron/
-   │  ├─ main.ts           ← Electron main process
-  │  ├─ preload.ts        ← contextBridge APIs (moved under electron/)
+  ├─ electron/
+  │  ├─ electron.ts       ← Electron main process
+   │  ├─ preload.ts        ← contextBridge APIs
    │  ├─ ipc/
    │  │  └─ appInfo.ts
    │  └─ utils/
