@@ -8,7 +8,7 @@ function createWindow() {
     width: 1100,
     height: 750,
     webPreferences: {
-      preload: path.join(__dirname, "../preload/preload.js"),
+      preload: path.join(__dirname, "preload.js"),
       contextIsolation: true,
       nodeIntegration: false,
     },
@@ -37,6 +37,8 @@ function getAppInfo() {
   };
 }
 
+// Prevent a GPU crash on some Linux systems
+app.disableHardwareAcceleration();
 app.whenReady().then(() => {
   // Handle IPC requests from renderer
   ipcMain.handle("get-app-info", () => {
