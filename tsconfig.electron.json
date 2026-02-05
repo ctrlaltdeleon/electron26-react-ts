@@ -1,13 +1,22 @@
 {
+  // Extend shared project-wide TypeScript settings from `tsconfig.json`.
   "extends": "./tsconfig.json",
   "compilerOptions": {
+    // Electron main and preload use CommonJS at runtime (Node/Electron).
     "module": "CommonJS",
+    // Where compiled Electron (main/preload) JS files are emitted.
     "outDir": "dist",
+    // Root folder for the source files for this part of the app.
     "rootDir": "src",
+    // Language target for emitted JS. Keep aligned with renderer and Node/Electron.
     "target": "ES2022",
+    // Use Node-style module resolution for Electron main process code.
     "moduleResolution": "Node",
+    // Minimal runtime libs required for main/preload (no DOM here).
     "lib": ["ES2022"],
+    // We want emitted files for Electron; ensure `noEmit` is false.
     "noEmit": false
   },
-  "include": ["src/main/**/*.ts", "src/preload/**/*.ts"]
+  // Only compile the main process and preload TypeScript sources.
+  "include": ["src/ekectron/**/*.ts", "src/preload/**/*.ts"]
 }

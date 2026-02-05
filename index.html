@@ -1,16 +1,29 @@
 <!doctype html>
+<!-- Root HTML document for the Electron + React + TypeScript app -->
 <html lang="en">
   <head>
+    <!-- Meta: character set -->
     <meta charset="UTF-8" />
+    <!--
+      Content Security Policy (CSP): restricts where resources may load from.
+      Adjust for development (Vite/hot reload) or production builds as needed.
+    -->
     <meta
       http-equiv="Content-Security-Policy"
       content="default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self';"
     />
+    <!-- Responsive viewport scaling for different screen sizes -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Window title shown in the app frame or OS taskbar -->
     <title>Electron 26 + React + TS</title>
   </head>
   <body>
+    <!-- React will mount the application into this element -->
     <div id="root"></div>
+    <!--
+      Renderer entrypoint: loads the React + TypeScript application via Vite
+      as an ES module. Path is relative to the dev server or built output.
+    -->
     <script type="module" src="/src/renderer/main.tsx"></script>
   </body>
 </html>
