@@ -1,4 +1,4 @@
-import { app, BrowserWindow } from "electron";
+import { app, BrowserWindow, ipcMain } from "electron";
 import * as fs from "node:fs";
 import * as path from "node:path";
 import * as os from "node:os";
@@ -18,7 +18,6 @@ function createWindow() {
 
   if (devUrl) {
     win.loadURL(devUrl);
-    win.webContents.openDevTools({ mode: "detach" });
   } else {
     // Packaged: load built renderer
     const indexHtmlPath = path.join(__dirname, "../renderer/index.html");
@@ -26,7 +25,29 @@ function createWindow() {
   }
 }
 
+// Get app info for the renderer
+function getAppInfo() {
+  return {
+    electronVersion: process.versions.electron,
+    nodeVersion: process.versions.node,
+    appVersion: app.getVersion(),
+    isDev: !app.isPackaged,
+    platform: process.platform,
+    arch: process.arch,
+  };
+}
+
 app.whenReady().then(() => {
+  // Handle IPC requests from renderer
+  ipcMain.handle("get-app-info", () => {
+    return getAppInfo();
+  });
+
+  // Example: Handle IPC messages from renderer
+  ipcMain.on("test-message", (event, message) => {
+    console.log("Message from renderer:", message);
+  });
+
   createWindow();
 
   app.on("activate", () => {
