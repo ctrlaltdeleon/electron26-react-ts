@@ -5,7 +5,7 @@
     // Electron main and preload use CommonJS at runtime (Node/Electron).
     "module": "CommonJS",
     // Where compiled Electron (main/preload) JS files are emitted.
-    "outDir": "dist",
+    "outDir": "dist/electron",
     // Root folder for the source files for this part of the app.
     "rootDir": "src",
     // Language target for emitted JS. Keep aligned with renderer and Node/Electron.
