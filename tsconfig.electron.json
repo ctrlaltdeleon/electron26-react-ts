@@ -17,6 +17,6 @@
     // We want emitted files for Electron; ensure `noEmit` is false.
     "noEmit": false
   },
-  // Only compile the main process and preload TypeScript sources.
-  "include": ["src/ekectron/**/*.ts", "src/preload/**/*.ts"]
+  // Only compile the electron main process and preload TypeScript sources.
+  "include": ["src/electron/**/*.ts", "src/preload/**/*.ts"]
 }

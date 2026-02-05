@@ -1,14 +1,26 @@
 {
+  // Shared TypeScript settings used by renderer and other project configs.
   "compilerOptions": {
+    // Target JS language level emitted by the compiler.
     "target": "ES2022",
+    // Module format for emitted code in the renderer (ES modules for Vite).
     "module": "ESNext",
+    // Library type definitions available during compilation.
+    // `DOM` is needed for browser/renderer APIs; `ES2022` for modern JS features.
     "lib": ["ES2022", "DOM"],
+    // Use the new JSX transform provided by React 17+ (`react-jsx`).
     "jsx": "react-jsx",
+    // Let the bundler (Vite/Rollup) resolve modules using its expectations.
     "moduleResolution": "Bundler",
+    // Enable all strict type-checking options for better type safety.
     "strict": true,
+    // Skip type checking of declaration files for faster builds.
     "skipLibCheck": true,
+    // Base directory to resolve non-relative module imports.
     "baseUrl": ".",
+    // Include Node types by default (useful for Electron preload/type helpers).
     "types": ["node"]
   },
+  // Files/globs included in compilation. Keep this focused on your `src` folder.
   "include": ["src"]
 }
