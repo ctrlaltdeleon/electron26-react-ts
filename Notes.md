@@ -69,6 +69,34 @@
   - `vite.config.ts`
   - Create `src/test/setup.ts`
 
+## Why did we add `vite.config.mts` and update scripts?
+
+- `@vitejs/plugin-react` is ESM-only. Vite was trying to load `vite.config.ts` via CommonJS `require`, which fails for ESM-only plugins.
+- Renaming the config to `vite.config.mts` forces Vite to load it as ESM so the plugin can be imported correctly.
+- The `dev:renderer` and `build:renderer` scripts now pass `--config vite.config.mts` to ensure Vite always uses the ESM config.
+- Think of ESM as a “new plug shape” and CommonJS as the “old plug shape”.
+- The React plugin only fits the new plug (ESM). Our old config loader used the old plug (CommonJS), so it couldn’t connect.
+- Renaming to `.mts` and pointing Vite to it makes it use the new plug shape so everything fits.
+
+## What does ESM mean?
+
+- ESM = ECMAScript Modules. It’s the modern JavaScript way to import/export code using `import` and `export`.
+- CommonJS is the older Node.js way using `require()` and `module.exports`.
+- ESM is the “new standard” way to connect JavaScript files.
+- CommonJS is the “older standard.”
+- Some packages only work with the new standard, so we must use it for the config.
+
+## Why add `vitest.config.mts`?
+
+- Tests failed with `document is not defined`, which happens when the test environment is Node (no DOM).
+- `vitest.config.mts` explicitly sets `environment: "jsdom"` and uses `src/test/setup.ts`, so React Testing Library can access `document`.
+
+### ELI5 version
+
+- Tests were running in a place with **no browser**, so there was no `document`.
+- `jsdom` is a **fake browser** for tests.
+- The new config tells tests to use that fake browser so React tests can run.
+
 ## What is the typical Vite + React project structure?
 
 ```
