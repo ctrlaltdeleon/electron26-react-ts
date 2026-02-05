@@ -51,6 +51,42 @@ Dev tips
 - When switching OS/machine, delete `node_modules` and re-run `npm install`.
 - Use `npm audit` and `npm outdated` regularly.
 
+Offline Development
+
+If you need to work on an offline machine (no internet), use the offline cache scripts:
+
+**Step 1: Prepare caches (on a machine WITH internet, same OS as target)**
+
+```bash
+# On Linux (to use on an offline Linux machine):
+./scripts/prepare-offline.sh --dist-linux --clean
+
+# On Windows (to use on an offline Windows machine):
+./scripts/prepare-offline.sh --dist-win --clean
+
+# On macOS (to use on an offline macOS machine):
+./scripts/prepare-offline.sh --dist-mac --clean
+```
+
+This downloads npm packages, Electron, and build tools into `.offline-cache/` (included in repo).
+
+**Step 2: Transfer to offline machine**
+
+Copy the entire repo (with `.offline-cache/`) to your offline machine.
+
+**Step 3: Use offline cache**
+
+On the offline machine, wrap all commands with the cache script:
+
+```bash
+./scripts/use-offline-cache.sh npm ci              # Install deps
+./scripts/use-offline-cache.sh npm run dev         # Start dev
+./scripts/use-offline-cache.sh npm run build       # Build for prod
+./scripts/use-offline-cache.sh npm run dist:linux  # Package (if on Linux)
+```
+
+⚠️ **Critical:** Only use on the same OS where you prepared the caches. `.offline-cache/` contains platform-specific binaries.
+
 Further improvements (suggested next steps)
 
 - Add ESLint + Prettier and pre-commit hooks.

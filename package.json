@@ -3,11 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "description": "Electron 26 + React + TypeScript + electron-builder boilerplate",
-  "main": "dist/main/main.js",
+  "main": "dist/electron/electron.js",
   "scripts": {
     "dev:renderer": "vite",
     "dev:electron:build": "tsc -p tsconfig.electron.json -w --preserveWatchOutput",
-    "dev:electron": "wait-on tcp:5173 dist/main/main.js && cross-env VITE_DEV_SERVER_URL=http://localhost:5173 electron .",
+    "dev:electron": "wait-on tcp:5173 dist/electron/electron.js && cross-env VITE_DEV_SERVER_URL=http://localhost:5173 electron .",
     "dev": "concurrently -k \"npm run dev:renderer\" \"npm run dev:electron:build\" \"npm run dev:electron\"",
     "build:renderer": "vite build",
     "build:electron": "tsc -p tsconfig.electron.json",
