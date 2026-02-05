@@ -1,26 +1,61 @@
-# My notes
+# Notes
 
-- AI explains that for building distributions, it should be on the native machine or CICD, but don't have that luxury.
-- Finding a way to cache all the dependencies into the repo itself so that in the offline build we can reference that instead.
-- Ran into the issue for Wine again.
-- In Ubuntu VMs, prefer .deb over Snap for development tools like VS Code to avoid sandbox-related issues and keep the environment predictable.'
-- Crypto error?
-  - Most likely wrong Node/NPM version when it should be 18.20.8, 10.8.2
-- Node 16 on the host machine
-- Check the file struture if it's strict ac\*\*\*
-- Try getting sonarqube to work
+## Should I install Linux software using .deb or snap (terminal)?
 
-# Tasks
+- In Ubuntu VMs, prefer `.deb` over `snap` for development tools like VSCode to avoid sandbox-related issues and keep the environment predictable.
 
-- Get the packages working for the boilerplate
-  - Make an offline cache so we don't have to reference electron/electron-builder everytime
-    - Would make building a lot more easier due to less variables
-  - Should still figure out where to put files anyways
-  - Wine still breaks, it's weird because I guess building a Win on Linux is dangerous, not recommended, left for the CI/CD to do
-- Try BRT Frontend
-  - Tried, put down notes on what made the window worked
-  - Surprisingly, npm run electron booted up the react code as well?
-    - Don't do npm run dev?
-- Get backend and mongo working
-  - Pin on this, not going anywhere
-  - Backend/Mongo already working on dev machines anyway
+## Ran across a crypto error when trying to build the project?
+
+- Most likely wrong Node/NPM version when it should be 18.20.8/10.8.2.
+- For reference, Node 16 was used on the host machine.
+
+## Is Vite strict on the structure of the project?
+
+- No.
+
+## What happens if there's files too large for Git?
+
+- Need to have `git lfs` installed to have the large files to work.
+  - What is `git lfs`?
+    - Git Large File Storage.
+    - Files too big for typical Github repo is placed somewhere else as pointers fill the repo to where the actual files are.
+    - Anything more than 100MB? Need to use `git lfs`
+  - Why use `git lfs`?
+    - Transferring of the `release` folder.
+  - Linux
+    - `sudo apt update`
+    - `sudo apt install git-lfs`
+  - MacOS
+    - `brew install git-lfs`
+  - Windows
+    - `git lfs install`
+  - Then inside the repo directory:
+    - `git lfs pull`
+    - Not working? Force it.
+      - `git lfs fetch -all`
+      - `git lfs checkout`
+  - If `git lfs` was installed BEFORE cloning the repo, should be fine.
+  - If `git lfs` was installed AFTER cloning the repo, then:
+    - `git lfs migrate import --include="release/**`
+      - For this example, I just chose the "release" folder since that's where the big files were.
+    - `git push --force-with-lease origin main`
+
+## Why won't Linux build a Windows distribution?
+
+- It can, but extremely difficult.
+- It requires complex emulation tooling (Wine) or Docker to mimic Windows build environments.
+- Going forward, need to use a Docker container with the correct Wine emulation in order to create the build.
+- Typical workflow is so:
+  - Spin up Wine Docker container
+  - `git clone` this repo whether it be within the container or moved into the container
+    - Just make sure it was `git clone` in the first place with a computer with `git lfs` already installed or else it won't work!
+  - `npm run dist:win`
+    - Script name may be changed.
+
+## What to do with the scripts folder?
+
+- Run these scripts on the respective OS in order for files to function correctly.
+
+## Need to update the packages?
+
+- Yes. :(
