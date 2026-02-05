@@ -1,0 +1,265 @@
+================================================================================
+  PACKAGE.JSON ANNOTATED REFERENCE
+================================================================================
+
+PROJECT METADATA
+================================================================================
+  "name": "electron26-react-ts"
+    → Unique identifier for the project.
+
+  "version": "0.1.0"
+    → Semantic version. Increment when releasing updates.
+
+  "private": true
+    → Prevents accidental publication to npm registry.
+
+  "description": "Electron 26 + React + TypeScript + electron-builder boilerplate"
+    → Short project summary.
+
+  "main": "dist/electron/electron.js"
+    → Entry point Electron loads at startup.
+    → Compiled from src/electron/electron.ts via tsc.
+    → ⚠️  Must match tsconfig.electron.json output (outDir: "dist", rootDir: "src").
+
+
+NPM SCRIPTS (Development & Building)
+================================================================================
+
+DEV SCRIPTS (Run during development with `npm run dev`)
+------
+
+  "dev:renderer": "vite"
+    → Starts Vite dev server on http://localhost:5173
+    → Serves React app with hot module replacement (HMR).
+    → File: src/renderer/main.tsx
+
+  "dev:electron:build": "tsc -p tsconfig.electron.json -w --preserveWatchOutput"
+    → TypeScript compiler in watch mode for src/electron/ and src/preload/.
+    → Compiles to dist/electron*.js and dist/preload.js continuously.
+    → Flags:
+        -p tsconfig.electron.json  : Use Electron-specific config
+        -w                         : Watch mode (recompile on file change)
+        --preserveWatchOutput      : Keep console output on rebuild
+
+  "dev:electron": "wait-on tcp:5173 dist/electron/electron.js && cross-env VITE_DEV_SERVER_URL=http://localhost:5173 electron ."
+    → Launches Electron app in development.
+    → Steps:
+        1. wait-on tcp:5173        : Block until Vite dev server is ready
+        2. wait-on dist/electron/electron.js : Block until Electron code compiled
+        3. cross-env ...           : Set env vars cross-platform (Windows/Mac/Linux)
+        4. electron .              : Start Electron with cwd as app root
+    → Env: VITE_DEV_SERVER_URL=http://localhost:5173 (tells app where to load UI from)
+
+  "dev": "concurrently -k \"npm run dev:renderer\" \"npm run dev:electron:build\" \"npm run dev:electron\""
+    → Master dev command. Runs all three above in parallel.
+    → concurrently -k : Kill all on first exit (Ctrl+C kills all).
+    → Use: npm run dev (runs everything at once)
+
+BUILD SCRIPTS (Compile for production)
+------
+
+  "build:renderer": "vite build"
+    → Vite production build of React app.
+    → Output: dist/renderer/ (minified, optimized).
+    → Config: vite.config.ts (base: "./", outDir: "dist/renderer")
+
+  "build:electron": "tsc -p tsconfig.electron.json"
+    → TypeScript compilation (one-time, no watch) for src/electron/ + src/preload/.
+    → Output: dist/electron.js, dist/preload.js
+
+  "build": "npm run build:renderer && npm run build:electron"
+    → Full production build. Renderer first, then Electron code.
+    → Order matters: renderer must finish before dist/ is packaged.
+
+PACKAGING SCRIPTS (Bundle & distribute)
+------
+
+  "dist": "npm run build && electron-builder"
+    → Builds app and creates installers for the current OS.
+    → Output: release/ (varies by OS: AppImage, deb, exe, dmg, etc.)
+
+  "dist:linux": "npm run build && electron-builder --linux"
+    → Linux packages only (AppImage, deb).
+    → Uses build.linux config.
+
+  "dist:win": "npm run build && electron-builder --win"
+    → Windows packages only (NSIS installer, ZIP).
+    → Uses build.win config.
+
+  "dist:mac": "npm run build && electron-builder --mac"
+    → macOS packages only (DMG, ZIP).
+    → Uses build.mac config.
+
+  "dist:all": "npm run build && electron-builder -lwm"
+    → All platforms (Linux, Windows, macOS).
+    → Flags: -l (Linux), -w (Windows), -m (macOS).
+    → Requires cross-compile tools or multiple machines.
+
+
+DEPENDENCIES
+================================================================================
+
+PRODUCTION DEPENDENCIES (ship with the app)
+------
+
+  "react": "^19.0.0"
+    → UI library. Used in src/renderer/.
+    → ^ means ≥19.0.0, <20.0.0 (compatible versions).
+
+  "react-dom": "^19.0.0"
+    → React DOM renderer. Required for web/Electron UI.
+
+DEVELOPMENT DEPENDENCIES (used during build/dev, not shipped)
+------
+
+  "@types/node": "^24.0.0"
+    → TypeScript type definitions for Node.js APIs.
+    → Needed for src/electron/, src/preload/ (they use Node/Electron APIs).
+
+  "@types/react": "^19.0.0"
+    → TypeScript types for React components and hooks.
+
+  "@types/react-dom": "^19.0.0"
+    → TypeScript types for React DOM APIs.
+
+  "@vitejs/plugin-react": "^4.0.0"
+    → Vite plugin for JSX transformation and React fast refresh.
+    → Configured in vite.config.ts.
+
+  "concurrently": "^9.0.0"
+    → CLI tool to run multiple commands in parallel.
+    → Used in `npm run dev` to orchestrate dev:renderer, dev:electron:build, dev:electron.
+
+  "cross-env": "^7.0.3"
+    → Sets environment variables cross-platform (Windows/Mac/Linux).
+    → Used in dev:electron script to set VITE_DEV_SERVER_URL.
+
+  "electron": "26.0.0"
+    → Electron framework. PINNED to exact version (no ^ or ~).
+    → Used by electron . in dev and electron-builder in packaging.
+    → ⚠️  Pinned on purpose; upgrade explicitly when needed.
+
+  "electron-builder": "^25.0.0"
+    → Tool for packaging Electron apps into installers.
+    → Reads build config from package.json["build"].
+
+  "electronmon": "^2.0.0"
+    → (Optional) File watcher for Electron main process reloads.
+    → Currently not used in scripts (concurrently + tsc -w is the pattern here).
+
+  "typescript": "^5.0.0"
+    → TypeScript compiler. Used by tsc commands in build scripts.
+
+  "vite": "^5.0.0"
+    → Build tool & dev server for the renderer (React).
+    → Configured in vite.config.ts.
+
+  "wait-on": "^8.0.0"
+    → CLI tool to wait for a port or file to be ready.
+    → Used in dev:electron to ensure Vite server and compiled Electron code exist.
+
+
+BUILD CONFIGURATION (electron-builder)
+================================================================================
+
+  "build": { ... }
+    → Top-level key configures electron-builder behavior (packaging, code signing, etc.).
+
+  COMMON OPTIONS
+  ------
+  "appId": "com.example.electron26reactts"
+    → Unique bundle identifier (like Java/Android package names).
+    → Used for macOS, code signing, app registry.
+    → Should be your own domain-based name (e.g., com.yourcompany.appname).
+
+  "productName": "Electron26ReactTS"
+    → User-visible app name in installer and system menus.
+    → If omitted, uses "name" from package.json.
+
+  "files": ["dist/**/*"]
+    → Which files to include in the packaged app.
+    → "dist/**/*" includes renderer and electron builds.
+    → ⚠️  Excludes node_modules, src/, .git/, etc. (good for security & size).
+
+  "directories": { "output": "release" }
+    → Where packaged installers go.
+    → Creates release/ folder with .exe, .AppImage, .dmg, etc.
+
+  PLATFORM-SPECIFIC CONFIGS
+  ------
+
+  "linux": { "target": ["AppImage", "deb"], "category": "Development" }
+    → Linux installers: AppImage (portable, portable executable) and deb (Debian package).
+    → category: "Development" (for .desktop file categorization).
+
+  "win": { "target": ["nsis", "zip"] }
+    → Windows installers: NSIS (installer wizard) and ZIP (portable archive).
+
+  "mac": { "target": ["dmg", "zip"] }
+    → macOS installers: DMG (disk image, installer) and ZIP (portable).
+
+
+COMPILATION FLOW (Quick Reference)
+================================================================================
+
+Development (npm run dev):
+  1. Vite starts at http://localhost:5173 (src/renderer/main.tsx)
+  2. tsc watches and compiles src/electron/electron.ts → dist/electron.js
+  3. tsc watches and compiles src/preload/preload.ts → dist/preload.js
+  4. Electron launches, loads dist/electron.js as main process
+  5. Main process opens window, points to http://localhost:5173 for UI (via VITE_DEV_SERVER_URL)
+
+Production Build (npm run build):
+  1. Vite builds src/renderer/main.tsx → dist/renderer/ (optimized)
+  2. tsc compiles src/electron/electron.ts → dist/electron.js
+  3. tsc compiles src/preload/preload.ts → dist/preload.js
+
+Packaging (npm run dist:linux):
+  1. Runs `npm run build` (see above)
+  2. electron-builder reads build config and dist/
+  3. Creates installers in release/ (AppImage, deb, etc.)
+
+OUTPUT LOCATIONS
+================================================================================
+  dist/electron.js        → Compiled Electron main process (from src/electron/)
+  dist/preload.js         → Compiled preload script (from src/preload/)
+  dist/renderer/          → Compiled React app (from src/renderer/, built by Vite)
+  release/                → Packaged installers (created by electron-builder)
+  release/*.AppImage      → Linux portable executable
+  release/*.deb           → Linux Debian package
+  release/*.exe           → Windows NSIS installer
+  release/*.zip           → Windows/macOS portable archive
+  release/*.dmg           → macOS disk image (installer)
+
+COMMON ISSUES & FIXES
+================================================================================
+
+❌ "Cannot find module 'electron'" after npm install
+  ✓ Delete node_modules and package-lock.json, re-run npm install.
+  ✓ Electron has native bindings; rebuilding is sometimes needed.
+
+❌ Dev runs but packaged app is blank
+  ✓ Check: dist/renderer/ is created and contains index.html, CSS, JS.
+  ✓ Check: src/electron/electron.ts loads from a valid path (file:// or bundled).
+  ✓ Check: CSP in index.html doesn't block preload or main.js.
+
+❌ "dist/electron.js not found" during dev
+  ✓ Ensure dev:electron:build script ran first (or ran without errors).
+  ✓ Check tsc output for compilation errors in src/electron/ or src/preload/.
+
+❌ Hot reload not working
+  ✓ Dev:renderer is running (Vite at 5173)?
+  ✓ Dev:electron has the correct VITE_DEV_SERVER_URL?
+
+BEST PRACTICES
+================================================================================
+  • Keep Electron pinned (26.0.0) unless upgrading intentionally.
+  • Run `npm audit` regularly; fix high/critical vulnerabilities.
+  • Use `npm run dev` for active development (all three processes).
+  • Use `npm run build` before `npm run dist:*` (or dist scripts will build for you).
+  • Test on target OS before releasing (or use CI/CD to build per platform).
+  • Update "main" field if the electron entry point changes.
+  • Update "productName" to match your app's branding.
+  • Update "appId" to something unique before releasing.
+
+================================================================================
