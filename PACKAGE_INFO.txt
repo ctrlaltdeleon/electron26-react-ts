@@ -4,7 +4,7 @@
 
 PROJECT METADATA
 ================================================================================
-  "name": "electron26-react-ts"
+  "name": "electron-react-ts"
     → Unique identifier for the project.
 
   "version": "0.1.0"
@@ -13,7 +13,7 @@ PROJECT METADATA
   "private": true
     → Prevents accidental publication to npm registry.
 
-  "description": "Electron 26 + React + TypeScript + electron-builder boilerplate"
+  "description": "Electron + React + TypeScript + electron-builder boilerplate"
     → Short project summary.
 
   "main": "dist/electron/electron.js"
@@ -34,8 +34,8 @@ DEV SCRIPTS (Run during development with `npm run dev`)
     → File: src/renderer/main.tsx
 
   "dev:electron:build": "tsc -p tsconfig.electron.json -w --preserveWatchOutput"
-    → TypeScript compiler in watch mode for src/electron/ and src/preload/.
-    → Compiles to dist/electron*.js and dist/preload.js continuously.
+    → TypeScript compiler in watch mode for src/electron/ (includes preload.ts).
+    → Compiles to dist/electron/*.js continuously.
     → Flags:
         -p tsconfig.electron.json  : Use Electron-specific config
         -w                         : Watch mode (recompile on file change)
@@ -64,8 +64,8 @@ BUILD SCRIPTS (Compile for production)
     → Config: vite.config.ts (base: "./", outDir: "dist/renderer")
 
   "build:electron": "tsc -p tsconfig.electron.json"
-    → TypeScript compilation (one-time, no watch) for src/electron/ + src/preload/.
-    → Output: dist/electron.js, dist/preload.js
+    → TypeScript compilation (one-time, no watch) for src/electron/ (includes preload.ts).
+    → Output: dist/electron/electron.js, dist/electron/preload.js
 
   "build": "npm run build:renderer && npm run build:electron"
     → Full production build. Renderer first, then Electron code.
@@ -114,7 +114,7 @@ DEVELOPMENT DEPENDENCIES (used during build/dev, not shipped)
 
   "@types/node": "^24.0.0"
     → TypeScript type definitions for Node.js APIs.
-    → Needed for src/electron/, src/preload/ (they use Node/Electron APIs).
+    → Needed for src/electron/ (including preload.ts; they use Node/Electron APIs).
 
   "@types/react": "^19.0.0"
     → TypeScript types for React components and hooks.
@@ -167,12 +167,12 @@ BUILD CONFIGURATION (electron-builder)
 
   COMMON OPTIONS
   ------
-  "appId": "com.example.electron26reactts"
+  "appId": "com.example.electronreactts"
     → Unique bundle identifier (like Java/Android package names).
     → Used for macOS, code signing, app registry.
     → Should be your own domain-based name (e.g., com.yourcompany.appname).
 
-  "productName": "Electron26ReactTS"
+  "productName": "ElectronReactTS"
     → User-visible app name in installer and system menus.
     → If omitted, uses "name" from package.json.
 
@@ -205,14 +205,14 @@ COMPILATION FLOW (Quick Reference)
 Development (npm run dev):
   1. Vite starts at http://localhost:5173 (src/renderer/main.tsx)
   2. tsc watches and compiles src/electron/electron.ts → dist/electron.js
-  3. tsc watches and compiles src/preload/preload.ts → dist/preload.js
+  3. tsc watches and compiles src/electron/preload.ts → dist/electron/preload.js
   4. Electron launches, loads dist/electron.js as main process
   5. Main process opens window, points to http://localhost:5173 for UI (via VITE_DEV_SERVER_URL)
 
 Production Build (npm run build):
   1. Vite builds src/renderer/main.tsx → dist/renderer/ (optimized)
   2. tsc compiles src/electron/electron.ts → dist/electron.js
-  3. tsc compiles src/preload/preload.ts → dist/preload.js
+  3. tsc compiles src/electron/preload.ts → dist/electron/preload.js
 
 Packaging (npm run dist:linux):
   1. Runs `npm run build` (see above)
@@ -221,15 +221,15 @@ Packaging (npm run dist:linux):
 
 OUTPUT LOCATIONS
 ================================================================================
-  dist/electron.js        → Compiled Electron main process (from src/electron/)
-  dist/preload.js         → Compiled preload script (from src/preload/)
-  dist/renderer/          → Compiled React app (from src/renderer/, built by Vite)
-  release/                → Packaged installers (created by electron-builder)
-  release/*.AppImage      → Linux portable executable
-  release/*.deb           → Linux Debian package
-  release/*.exe           → Windows NSIS installer
-  release/*.zip           → Windows/macOS portable archive
-  release/*.dmg           → macOS disk image (installer)
+  dist/electron/electron.js  → Compiled Electron main process (from src/electron/)
+  dist/electron/preload.js   → Compiled preload script (from src/electron/)
+  dist/renderer/             → Compiled React app (from src/renderer/, built by Vite)
+  release/                   → Packaged installers (created by electron-builder)
+  release/*.AppImage         → Linux portable executable
+  release/*.deb              → Linux Debian package
+  release/*.exe              → Windows NSIS installer
+  release/*.zip              → Windows/macOS portable archive
+  release/*.dmg              → macOS disk image (installer)
 
 COMMON ISSUES & FIXES
 ================================================================================
@@ -245,7 +245,7 @@ COMMON ISSUES & FIXES
 
 ❌ "dist/electron.js not found" during dev
   ✓ Ensure dev:electron:build script ran first (or ran without errors).
-  ✓ Check tsc output for compilation errors in src/electron/ or src/preload/.
+  ✓ Check tsc output for compilation errors in src/electron/.
 
 ❌ Hot reload not working
   ✓ Dev:renderer is running (Vite at 5173)?
@@ -261,5 +261,4 @@ BEST PRACTICES
   • Update "main" field if the electron entry point changes.
   • Update "productName" to match your app's branding.
   • Update "appId" to something unique before releasing.
-
 ================================================================================

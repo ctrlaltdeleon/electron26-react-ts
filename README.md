@@ -1,4 +1,4 @@
-# Electron 26 + React + TypeScript (concise)
+# Electron + React + TypeScript (concise)
 
 A compact starter for an Electron app with a Vite-powered React renderer and TypeScript for both renderer and Electron code.
 
@@ -6,7 +6,7 @@ Quick overview
 
 - Renderer: React + Vite (dev server, ES modules)
 - Main: Electron main process (CommonJS output)
-- Preload: Secure bridge exposing minimal APIs to the renderer
+- Preload: Secure bridge exposing minimal APIs to the renderer (in src/electron/preload.ts)
 
 What changed / notes
 
@@ -26,17 +26,21 @@ Essential scripts
 Project layout (important parts)
 
 ```
+.offline-cache/  # Dependencies to be ready from online to offline via cache
+dist/            # Build outputs (generated)
+draft/           # Old foundation for this project
+node_modules/    # Dependencies
+release/         # App to be served on any OS (if the build exists)
+scripts/         # Scripts that create and use the .offline-cache/
 src/
   renderer/      # React app (entry: src/renderer/main.tsx)
-  electron/      # Electron main process (electron.ts)
-  preload/       # Preload scripts (expose safe APIs)
+  electron/      # Electron main process + preload (electron.ts, preload.ts)
 index.html       # Renderer HTML; mounts to #root and loads /src/renderer/main.tsx
-vite.config.ts   # Vite config (renderer)
-tsconfig.json    # Shared TypeScript config
-tsconfig.electron.json # Electron-specific config (CommonJS, outDir: dist)
 package.json     # Scripts, deps, and electron-builder config
 release/         # Packaged outputs (generated)
-dist/            # Build outputs (generated)
+tsconfig.electron.json # Electron-specific config (CommonJS, outDir: dist)
+tsconfig.json    # Shared TypeScript config
+vite.config.ts   # Vite config (renderer)
 ```
 
 Security & best practices (short)

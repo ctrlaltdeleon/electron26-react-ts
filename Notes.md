@@ -59,3 +59,74 @@
 ## Need to update the packages?
 
 - Yes. :(
+
+## Can I run vitest, a testing suite?
+
+- Yes and no.
+- Yes the project can, but no because we're not on the correct node.
+  - From the vitest website, "Vitest requires Vite >=v6.0.0 and Node >=v20.0.0"
+- Went and installed an earlier version which works out well, but did have to touch these files:
+  - `vite.config.ts`
+  - Create `src/test/setup.ts`
+
+## What is the typical Vite + React project structure?
+
+```
+project-root/
+├─ index.html
+├─ package.json
+├─ vite.config.ts
+├─ tsconfig.json
+├─ tsconfig.node.json
+├─ public/
+│  └─ favicon.svg
+└─ src/
+   ├─ main.tsx          ← entry point (renderer bootstrap)
+   ├─ App.tsx           ← root React component
+   ├─ assets/           ← images, fonts, icons
+   ├─ components/       ← reusable UI pieces
+   │  └─ Button.tsx
+   ├─ pages/            ← route-level components (if routing)
+   ├─ hooks/            ← custom React hooks
+   ├─ utils/            ← pure helpers (formatters, math, etc.)
+   ├─ styles/           ← CSS / SCSS / Tailwind
+   └─ test/             ← test setup files
+      └─ setup.ts
+```
+
+## Now what does it look like with Electron included too?
+
+```
+project-root/
+├─ index.html
+├─ package.json
+├─ vite.config.ts
+├─ electron-builder.yml
+├─ tsconfig.json
+├─ tsconfig.node.json
+├─ tsconfig.electron.json
+├─ public/
+└─ src/
+   ├─ renderer/
+   │  ├─ main.tsx          ← Vite entry
+   │  ├─ App.tsx
+   │  ├─ components/
+   │  ├─ hooks/
+   │  ├─ pages/
+   │  ├─ utils/
+   │  ├─ assets/
+   │  └─ test/
+   │     └─ setup.ts
+   │
+   ├─ electron/
+   │  ├─ main.ts           ← Electron main process
+  │  ├─ preload.ts        ← contextBridge APIs (moved under electron/)
+   │  ├─ ipc/
+   │  │  └─ appInfo.ts
+   │  └─ utils/
+   │
+   └─ shared/
+      ├─ types/
+      ├─ constants/
+      └─ schemas/
+```
