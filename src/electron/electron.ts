@@ -14,6 +14,14 @@ function createWindow() {
     },
   });
 
+  // Mirror renderer console output to the main process terminal.
+  win.webContents.on(
+    "console-message",
+    (_event, level, message, line, sourceId) => {
+      console.log(`[renderer:${level}] ${message} (${sourceId}:${line})`);
+    },
+  );
+
   const devUrl = process.env.VITE_DEV_SERVER_URL;
 
   if (devUrl) {

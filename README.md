@@ -1,4 +1,4 @@
-# Electron + React + TypeScript (Electron 26)
+# Electron + React + TypeScript Boilerplate
 
 A compact Electron app with a Vite-powered React renderer and TypeScript on both sides.
 
