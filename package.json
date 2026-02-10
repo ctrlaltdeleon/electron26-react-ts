@@ -3,6 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "description": "Electron + React + TypeScript + electron-builder boilerplate",
+  "engines": {
+    "node": "18.x"
+  },
   "main": "dist/electron/electron.js",
   "scripts": {
     "dev": "concurrently -k \"npm run dev:renderer\" \"npm run dev:electron:build\" \"npm run dev:electron\"",
@@ -29,7 +32,7 @@
     "@testing-library/jest-dom": "6.9.1",
     "@testing-library/react": "16.3.2",
     "@testing-library/user-event": "14.6.1",
-    "@types/node": "24.0.0",
+    "@types/node": "18.19.0",
     "@types/react": "19.0.0",
     "@types/react-dom": "19.0.0",
     "@vitejs/plugin-react": "5.0.0",
@@ -40,7 +43,7 @@
     "electron-builder": "25.0.0",
     "electronmon": "2.0.0",
     "jsdom": "26.1.0",
-    "shx": "^0.4.0",
+    "shx": "0.4.0",
     "typescript": "5.4.5",
     "vite": "5.0.0",
     "vitest": "3.2.4",
