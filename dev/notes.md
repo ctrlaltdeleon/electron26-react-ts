@@ -161,3 +161,7 @@ project-root/
 - If changes are made, commit and push.
 - Then if ready to bring to offline world, run the "make-offline-ready.sh"
   - Make sure that the shell is `chmod +x make-offline-ready.sh`
+
+## Want to see what is in Nexus?
+
+`npm view socket.io versions --json`
