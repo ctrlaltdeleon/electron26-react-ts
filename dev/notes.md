@@ -173,3 +173,9 @@ git fetch --all
 git reset --hard origin/main
 git lfs pull
 ```
+
+## Why are we on Node 18?
+
+- It's usually paired with Electron 26 together.
+  - That's the only reason.
+  - Could get a more up to date Electron honestly.
