@@ -9,8 +9,7 @@ set -euo pipefail
 #   ./make-offline-ready.sh --dist-linux   # warms packaging caches too (recommended)
 #   ./make-offline-ready.sh --dist         # runs your npm run dist
 #   ./make-offline-ready.sh --out /path/to/output-dir
-#
-# Output (auto-named):
+# Output (auto-named) in offline-transfers/ by default:
 #   electron-react-ts-offline-YYYYMMDD-HHMMSS-gitsha.tar.gz
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -20,7 +19,7 @@ die() { printf "\nERROR: %s\n" "$*" >&2; exit 1; }
 
 DO_DIST=0
 DO_DIST_LINUX=0
-OUT_DIR="$ROOT"
+OUT_DIR="$ROOT/offline-transfers"
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
@@ -43,7 +42,7 @@ Usage:
   ./make-offline-ready.sh --dist           # runs npm run dist
   ./make-offline-ready.sh --out /path/to/output-dir
 
-Output is auto-named:
+Output is auto-named (defaults to offline-transfers/):
   electron-react-ts-offline-YYYYMMDD-HHMMSS-gitsha.tar.gz
 EOF
       exit 0
