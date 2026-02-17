@@ -3,6 +3,9 @@ import * as fs from "node:fs";
 import * as path from "node:path";
 import * as os from "node:os";
 
+// Constants
+const CRASH_RELOAD_DELAY_MS = 1000; // Delay before reloading after a renderer crash
+
 function createWindow() {
   const win = new BrowserWindow({
     width: 1100,
@@ -29,12 +32,12 @@ function createWindow() {
       "Renderer Process Crashed",
       `The renderer process has crashed.\nReason: ${details.reason}\nExit Code: ${details.exitCode}\n\nThe app will attempt to reload.`,
     );
-    // Attempt to reload the window
+    // Attempt to reload the window after a short delay
     setTimeout(() => {
       if (!win.isDestroyed()) {
         win.reload();
       }
-    }, 1000);
+    }, CRASH_RELOAD_DELAY_MS);
   });
 
   // Handle unresponsive renderer
@@ -87,7 +90,6 @@ app.disableHardwareAcceleration();
 // Additional STIG-friendly switches for offline/restricted environments
 // These help with systems that have GPU restrictions or security policies
 app.commandLine.appendSwitch("disable-dev-shm-usage"); // Helps with shared memory issues in restricted environments
-app.commandLine.appendSwitch("disable-gpu"); // Software rendering fallback
 app.commandLine.appendSwitch("disable-gpu-compositing"); // Additional GPU safeguard
 
 app.whenReady().then(() => {
@@ -104,8 +106,8 @@ app.whenReady().then(() => {
         .catch((err) => {
           console.warn("Failed to load Chrome extension:", err.message);
         });
-    } catch (err) {
-      console.warn("Error loading extension:", err);
+    } catch (err: any) {
+      console.warn("Error loading extension:", err.message);
     }
   } else {
     console.log(
