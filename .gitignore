@@ -6,3 +6,8 @@ dist/
 *.log
 .env
 node_modules
+
+# Offline workflow caches (included in tarball, not in git)
+.npm-cache/
+.electron-cache/
+.electron-builder-cache/
