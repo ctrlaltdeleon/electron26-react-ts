@@ -202,6 +202,26 @@ Native dependencies are OS-specific.
 
 ---
 
+## 📦 Transfer Artifacts (Same OS Only)
+
+If you need to move dependencies between machines **on the same OS**, you can
+create a zip archive of `node_modules` and place it in:
+
+```
+transfer/
+```
+
+Example archive naming:
+
+```
+node_modules-<branch>-<YYYYMMDD>.zip
+```
+
+Unzip it next to `package.json`, and it will restore the dependencies quickly
+without a full reinstall.
+
+---
+
 ### ⚠️ VS Code (Snap) on Ubuntu
 
 If you see `GLIBCXX` or `gio` errors:
